@@ -17,3 +17,23 @@ func GetTodos(c *fiber.Ctx) error {
 	// Якщо все добре, поверніть todos як JSON
 	return c.JSON(todos)
 }
+
+func CreateTodo(c *fiber.Ctx) error {
+	// Створення структури Todo для зберігання отриманих даних
+	todo := new(models.Todo)
+	// Розбір JSON з тіла запиту до структури Todo
+	err := c.BodyParser(todo)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannon parse JSON",
+		})
+	}
+	// Збереження нового Todo в базу даних
+	createdTodo := models.CreateTodo(todo)
+	if createdTodo == nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"error": "Failed to create todo",
+		})
+	}
+	return c.Status(fiber.StatusOK).JSON(createdTodo)
+}

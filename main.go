@@ -18,7 +18,7 @@ func main() {
 	}
 
 	app.Get("/api/todos", controllers.GetTodos)
-	//app.Post("/api/todos", createTodo)
+	app.Post("/api/todos", controllers.CreateTodo)
 	//app.Patch("/api/todos/:id", updateTodo)
 	//app.Delete("/api/todos/:id", deleteTodo)
 
