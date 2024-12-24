@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Nevojt/react-go-todo/controllers"
+	"github.com/Nevojt/react-go-todo/backend/controllers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"log"
@@ -18,9 +18,10 @@ func main() {
 	}
 
 	app.Get("/api/todos", controllers.GetTodos)
+	app.Get("/api/todos/:id", controllers.GetTodoById)
 	app.Post("/api/todos", controllers.CreateTodo)
-	//app.Patch("/api/todos/:id", updateTodo)
-	//app.Delete("/api/todos/:id", deleteTodo)
+	app.Patch("/api/todos/:id", controllers.UpdateTodo)
+	app.Delete("/api/todos/:id", controllers.DeleteTodo)
 
 	PORT := os.Getenv("PORT")
 	if PORT == "" {

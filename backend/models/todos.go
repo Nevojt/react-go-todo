@@ -1,10 +1,9 @@
 package models
 
 import (
-	"log"
-
-	"github.com/Nevojt/react-go-todo/config"
+	"github.com/Nevojt/react-go-todo/backend/config"
 	"gorm.io/gorm"
+	"log"
 )
 
 var db *gorm.DB
@@ -42,4 +41,32 @@ func GetTodos() ([]Todo, error) {
 		return nil, result.Error
 	}
 	return todos, nil
+}
+func GetTodoById(Id int) (*Todo, error) {
+	var todo Todo
+	result := db.First(&todo, Id)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &todo, nil
+}
+
+func UpdateTodo(todo *Todo) error {
+	db := config.GetDB()
+	result := db.Save(todo)
+	if result.Error != nil {
+		return result.Error
+	}
+	return nil
+}
+
+func DeleteTodo(Id int) error {
+	result := db.Delete(&Todo{}, Id)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return nil
 }
